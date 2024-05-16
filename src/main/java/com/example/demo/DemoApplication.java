@@ -34,6 +34,7 @@ public class DemoApplication {
                         // send remote data
                     });
         }
+        System.out.println("testApi response end");
     }
 
     public interface TestApi {
@@ -48,9 +49,9 @@ public class DemoApplication {
             var emitter = new ResponseBodyEmitter(Long.MAX_VALUE);
 
             new Thread(() -> {
-                for (int i = 0; i < 1000; i++) {
+                for (int i = 0; i < 50_000; i++) {
                     try {
-                        Thread.sleep(3_000);
+                        Thread.sleep(1_000);
                     } catch (InterruptedException ignored) {
                     }
 
@@ -60,6 +61,9 @@ public class DemoApplication {
                         throw new RuntimeException(e);
                     }
                 }
+
+                emitter.complete();
+                System.out.println("emitter complete");
             }).start();
 
             return emitter;
